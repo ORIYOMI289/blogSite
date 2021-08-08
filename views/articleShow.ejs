@@ -1,0 +1,47 @@
+
+<%- include('partials/header.ejs') %>
+
+        <div class="container px-4 px-lg-5">
+            <div class="row"> 
+                <div class="col-md-10">
+                    <div class="text-danger"> gdbnmgudygfahs</div>
+                </div>
+            </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                         <!-- Post preview-->
+                        <div class="post-preview">
+                            <a href="articles/<%= Articles.slug %>">
+                                <h2>
+                                    <%= Articles.title %>
+                                </h2>
+                                <h3 class="post-subtitle">
+                                    <%= Articles.subtitle %>
+                                </h3>
+                                
+                            </a>
+                            <p class="post-meta">
+                                Posted by
+                                <a href="#!">Jewel</a>
+                                on <%= Articles.createdAt.toLocaleDateString() %>
+                            </p>
+                        </div>
+                       
+                        <!-- Divider-->
+                        <hr class="my-4" />
+                        <div class="d-flex justify-content-end mb-4">
+                        
+                            <a class="btn btn-primary text-uppercase my-4" href="/articles">All Articles → </a>
+                            <a class="btn btn-info text-uppercase" href="#">Edit →</a>
+    
+                        </div>
+                    </div>
+                   
+                 </div>
+
+
+             <!-- <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="/newarticles">New Articles →</a></div> -->
+
+        </div>
+
+        <%- include('partials/footer.ejs') %>
