@@ -27,7 +27,7 @@
                     <div class="col-md-10 col-lg-8 col-xl-7">
                          <!-- Post preview-->
                         <div class="post-preview">
-                            <a href="articles/<%= Articles.slug %>">
+                            <a href="articles/<%=Articles.slug %>">
                                 <h2 class="mt-5">
                                     <%= Articles.title %>
                                 </h2>
@@ -44,6 +44,19 @@
                         </div>
                        
                         <!-- Divider-->
+                        <hr class="my-4" />
+
+                        <div class="commentSection">
+                                <p><%= Comments.comment %> </p>
+                        </div>
+                        <form action="/articles/<%=Articles.slug%>" method="POST">
+                            <input class="form-control py-4" type="text" name="comment" placeholder="COMMENT" required>
+                            <div class="d-flex justify-content-end mb-4">
+                                <button type="submit">COMMENT</button>
+                                <!-- <a class="btn btn-primary text-uppercase mt-3 mx-5" href="/articles">POST → </a> -->
+                            </div>
+                            
+                        </form>
                         <hr class="my-4" />
                         <div class="d-flex justify-content-end mb-4">
                         

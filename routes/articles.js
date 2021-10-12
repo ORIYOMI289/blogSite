@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router() ;
-const articleModel = require('../model/newarticles') ;
+// const articleModel = require('../model/newarticles') ;
+const {newarticle, registeradmin} = require('../model/newarticles') ;
+const {newComments} = require('../model/articleComments') ;
 
 // const articlesContent = [{
 //     title: "new post",
@@ -14,25 +16,45 @@ router.get('/newarticles', (req, res) => {
 })
 
 router.get('/articleEdit/:id', async (req, res) => {
-    const article = await articleModel.findById(req.params.id)
-    res.render('Edit', {article : article })
+    const article = await newarticle.findById(req.params.id)
+    console.log(article)
+    res.render('Edit', {article : article }) ;
 }) ;
 
 
 router.get('/articles', (req, res, next) => {
            next()
-        }, ArticleCOntent("articlesDisplay"))
+}, ArticleCOntent("articlesDisplay"))
 
-router.get('/userArticle', (req, res, next) => {
-            next()
+router.get('/userArticles', (req, res, next) => {
+            next() ;
         }, ArticleCOntent('users'))
 
         // const routes = [ '/articles/:slug', '/articles/:id'] ;
 router.get( '/articles/:slug', async (req, res) => {
-    const Article = await articleModel.findOne({ slug: req.params.slug }) ;
+    const Article = await newarticle.findOne({ slug: req.params.slug }) ;
+   const comment = await newComments.findOne().sort({ _id: -1}) ;
+   const s = await newComments.findOne({ comment: req.body.comment} ) ;
+   console.log(s) ;
     if (Article == null) return res.redirect('/articles') ;
-    
-    res.render('articleShow', {Articles: Article})
+    res.render('articleShow', {Articles: Article, Comments: comment}) ;
+});
+
+
+router.post( '/articles/:slug', async (req, res) => {
+    const Article = await newarticle.findOne({ slug: req.params.slug }) ;
+    let commentData = new newComments({
+        comment : req.body.comment
+    }) ;
+
+    try {
+        await commentData.save() ;
+        // if (Article == null) return res.redirect(`/articles/${Article.slug}`) ;
+        res.redirect(`/articles/${commentData.slug}`)  ;
+    }
+    catch {
+        console.log("err") ;
+    }
 })
 
 router.post( '/articles', (req, res, next) => {
@@ -46,15 +68,38 @@ router.put( '/articlesEdit/:id', (req, res, next) => {
 }, postOrEditArticle('Edit') )
 
 router.delete('/:id', async (req, res) => {
-    await articleModel.findByIdAndDelete(req.params.id) 
+    await newarticle.findByIdAndDelete(req.params.id) 
     res.redirect('/articles')
+})
+
+//adminForm
+router.get(("/adminform"), (req, res) =>{
+    res.render('registerAdmin')
+})
+
+router.post('/', async (req, res) => {
+    // console.log( new registeradmin(req.body) )
+    let adminData = new registeradmin({
+        name: req.body.name,
+        email: req.body.email,
+        password : req.body.password,
+        title: req.body.title
+    });
+
+    try {
+         await adminData.save() ;
+         res.redirect("/articles") ;
+    }
+    catch{
+        console.log("You are not an admin")
+    }
 })
 
 
 
 function postOrEditArticle(path) {
     return async (req, res) => {
-        let article = new articleModel({
+        let article = new newarticle({
             title: req.body.title,
             subtitle: req.body.subtitle,
             description: req.body.description,
@@ -71,7 +116,7 @@ function postOrEditArticle(path) {
 } ;
 function ArticleCOntent(paths) {
     return async (req, res) => {
-        const article = await articleModel.find().sort({ 
+        const article = await newarticle.find().sort({ 
             createdAt: 'desc'
         }) ;
         try {

@@ -2,7 +2,7 @@ const mongoose = require('mongoose') ;
 const slugify = require('slugify') ;
 const marked = require('marked') ;
 
-articleSchema = new mongoose.Schema ({
+ const articleSchema = new mongoose.Schema ({
     title: {
         type: String,
         required: true
@@ -28,7 +28,28 @@ articleSchema = new mongoose.Schema ({
         required: true, 
         unqiue: true
     }
-}) ;
+}) 
+
+const registerAdmin = mongoose.model('admin', new mongoose.Schema({
+    title: {
+        type: String,
+        required:true
+    },
+    name: {
+        type: String,
+        required:true,
+         min: 5
+    },
+    password: {
+        type: String,
+        required:true,
+         min: 5
+    },
+    email: {
+        type: String,
+        required:true,
+    }
+})) ; 
 
 articleSchema.pre('validate', function(next) {
     if (this.title) {
@@ -37,8 +58,9 @@ articleSchema.pre('validate', function(next) {
     next()
 })
 
-const newArticle = mongoose.model( 'newarticle', articleSchema ) ;
+const newArticle = mongoose.model( 'newarticle', articleSchema );
 
 
 
-module.exports = newArticle
+exports.newarticle = newArticle ;
+exports.registeradmin = registerAdmin ;
