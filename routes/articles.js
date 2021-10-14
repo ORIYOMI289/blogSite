@@ -32,12 +32,15 @@ router.get('/userArticles', (req, res, next) => {
 
         // const routes = [ '/articles/:slug', '/articles/:id'] ;
 router.get( '/articles/:slug', async (req, res) => {
-    const Article = await newarticle.findOne({ slug: req.params.slug }) ;
-   const comment = await newComments.findOne().sort({ _id: -1}) ;
-   const s = await newComments.findOne({ comment: req.body.comment} ) ;
-   console.log(s) ;
-    if (Article == null) return res.redirect('/articles') ;
-    res.render('articleShow', {Articles: Article, Comments: comment}) ;
+    // const oneArticle = await newarticle.findOne({ slug: req.params.slug }) ;
+    // const Article = await newarticle.find() ;
+    articleData = await newarticle.find({ slug: req.params.slug }) ;
+   const comment = await newComments.find().sort( req.body.comment ) ;
+//    console.log(articleData) ;
+//    const s = await newComments.findOne({ comment: req.body.comment} ) ; 
+//    console.log(s) ; 
+    // if (Article == null) return res.redirect('/articles') ;
+    res.render('articleShow', {Articles: articleData, Comments: comment}) ; 
 });
 
 
