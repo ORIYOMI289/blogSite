@@ -10,7 +10,7 @@ require('dotenv').config()
 const port = process.env.PORT || 5000
 // const MODE = process.env.NODE_ENV || 'development'
 
-mongoose.connect('mongodb://localhost/blogsite', {
+mongoose.connect(process.env.mongodb,{
     useNewUrlParser: true ,
     useUnifiedTopology: true 
 })
